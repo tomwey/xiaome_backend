@@ -1,8 +1,8 @@
 # config valid only for Capistrano 3.1
 # lock '3.7.2'
 
-set :application, 'hhd_backend'
-set :deploy_user, "deployer"
+set :application, 'xiaome_backend'
+set :deploy_user, "root"
 
 # set :scm, :git
 set :repo_url, "git@github.com:tomwey/#{fetch(:application)}.git"

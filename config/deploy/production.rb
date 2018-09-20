@@ -7,11 +7,11 @@
 set :stage, :production
 set :branch, 'master'
 
-role :app, %w{deployer@120.132.57.133}
-role :web, %w{deployer@120.132.57.133}
-role :db,  %w{deployer@120.132.57.133}
+role :app, %w{root@xiaome.work}
+role :web, %w{root@xiaome.work}
+role :db,  %w{root@xiaome.work}
 
-set :server_name, "hhd.afterwind.cn"
+set :server_name, "portal.xiaome.work"
 # set :port, "80" # 默认都是80端口
 
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
@@ -23,7 +23,7 @@ set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server '120.132.57.133', user: "deployer", roles: %w{web app db}, primary: true
+server 'xiaome.work', user: "root", roles: %w{web app db}, primary: true
 
 set :deploy_to, "/data/www/apps/#{fetch(:full_app_name)}"
 #"/home/#{fetch(:deploy_user)}/apps/#{fetch(:full_app_name)}"
