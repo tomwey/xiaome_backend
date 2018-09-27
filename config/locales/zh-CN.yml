@@ -48,6 +48,9 @@
       redpack_view_log: '红包浏览记录'
       redpack_send_log: '抢红包记录'
       catalog: '分类'
+      salary: '工资发放申请'
+      project: '兼职'
+      profile: '用户基本资料'
     attributes:
       user:
         uid: 'ID'
@@ -69,6 +72,11 @@
         content: '内容'
         link: '消息链接地址'
         to_users: '消息接收人'
+      project:
+        title: '简介'
+        body: '内容描述'
+        money: '工资金额'
+      
       banner:
         image: '封面图'
         link: '链接地址'
