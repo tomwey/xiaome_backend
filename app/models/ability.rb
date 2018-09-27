@@ -6,19 +6,16 @@ class Ability
     
     if user.super_admin?
       can :manage, :all
-    else
-      can :read, :all
-      cannot :read, SiteConfig
-      
+    elsif user.admin?
+      can :manage, :all
+      cannot :manage, SiteConfig
+      cannot :destroy, :all
       can :update, AdminUser do |admin|
         admin.id == user.id
       end
-      
-      if user.marketer? or user.admin?
-        can :create, GameRecharge
-        can :recharge, GameRecharge
-      end
-      
+    else
+      can :read, :all
+      cannot :read, SiteConfig
     end
     
     # if user.super_admin?
