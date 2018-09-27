@@ -1,6 +1,5 @@
 <div class="container">
   <div class="login-box">
-    <h2>ID:<%= current_user.uid %></h2>
     <%= simple_form_for([:front, @salary], html: { class: "form-horizontal" },wrapper: :horizontal_form,
           wrapper_mappings: {
             check_boxes: :horizontal_radio_and_checkboxes,
