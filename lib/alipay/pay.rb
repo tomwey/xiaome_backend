@@ -17,7 +17,7 @@ module Alipay
           payee_account: mobile,
           amount: (money / 100.0).to_s,
           payee_real_name: name || '',
-          remark: '用户提现'
+          remark: '兼职工资'
         }.to_json
       }
       
@@ -30,7 +30,7 @@ module Alipay
         code = result['alipay_fund_trans_toaccount_transfer_response']['code']
         if code && code.to_i == 10000
           if rsa_verify_result(result)
-            return 0,'提现成功'
+            return 0,'工资发放成功'
           else
             return 4001,'验证签名失败'
           end
