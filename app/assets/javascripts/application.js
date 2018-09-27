@@ -45,6 +45,6 @@ window.Utils = {
   　　return pwd;
   },
   getAccessKey: function(str) {
-    return hex_md5('c896833925be9f17633ffc386c97b1bb' + str)
+    return hex_md5('b896833925be9f17633ffc386c97b1bb' + str)
   }
 }

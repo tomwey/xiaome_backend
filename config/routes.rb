@@ -17,35 +17,28 @@ Rails.application.routes.draw do
   
   # /redpack?id=3848484
   
-  get 'hb_test' => 'home#qrcode_test'
-  
-  get 'vote/portal' => 'home#vote'
-  get 'votes/:id'   => 'home#vote_item'
-  post 'vote/:id/begin' => 'home#begin_vote'
-  
-  get  'vote/bind_jury' => 'home#bind_jury', as: :bind_jury
-  post 'vote/login_jury'=> 'home#login_jury'
-  get  'vote/entry'     => 'home#vote_entry', as: :vote_entry
-  post 'vote/commit'    => 'home#commit_vote'
-  
   namespace :front, path: '' do 
     # 网页认证登录
-    # get    'login'    => 'sessions#new',       as: :login
-    get    'redirect' => 'sessions#save_user', as: :redirect_uri
-    delete 'logout'   => 'sessions#destroy',   as: :logout
-    get 'app_auth' => 'sessions#app_auth'
-    
-    get 'redpack'       => 'redpacks#detail', as: :redpack
-    
+    get    'login'    => 'sessions#new',       as: :login
+    post   'login'    => 'sessions#create',    as: :do_login
+    resources :profiles, only: [:new, :create]
+    resources :salaries, only: [:new, :create]
+    get '/salaries/apply_success' => 'salaries#apply_success', as: :apply_success
+    # get    'redirect' => 'sessions#save_user', as: :redirect_uri
+    # delete 'logout'   => 'sessions#destroy',   as: :logout
+    # get 'app_auth' => 'sessions#app_auth'
+    #
+    # get 'redpack'       => 'redpacks#detail', as: :redpack
+    #
     # redpack/result?id=3838939393
-    get 'redpack/result' => 'redpacks#result', as: :redpack_result
-    
-    get 'auth/redirect' => 'sessions#app_auth', as: :auth_redirect_uri
-    
+    # get 'redpack/result' => 'redpacks#result', as: :redpack_result
+    #
+    # get 'auth/redirect' => 'sessions#app_auth', as: :auth_redirect_uri
+    #
     # post redpack/take?id=4848474&sign=3838392
     # post 'redpack/take' => 'redpacks#take', as: :redpack_take
-    
-    post 'pay/wx_notify' => 'home#wx_notify', as: :wx_notify
+    #
+    # post 'pay/wx_notify' => 'home#wx_notify', as: :wx_notify
     
   end
   

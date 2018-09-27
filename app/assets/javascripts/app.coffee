@@ -317,16 +317,16 @@ window.App =
       fail: errorCallback
     })
     
-  getCode: (auth_code_api, el, i, ak) ->
+  getCode: (el) ->
     $('#alert-comp').remove()
     $('#notice-comp').remove()
     if $(el).data("loading") == '1'
       return false
       
-    mobile = $("#user_mobile").val()
+    mobile = $("#sessions_mobile").val()
     blank_mobile = mobile.replace(/\s+/, "")
     if blank_mobile.length == 0
-      App.alert("手机号不能为空", $('#signup_form'))
+      App.alert("手机号不能为空", $('.login-box form'))
       return false
     
     # captcha = $("#user_captcha").val()
@@ -334,9 +334,9 @@ window.App =
     #   App.alert("图片验证码不能为空", $('#new_user'))
     #   return false
       
-    reg = /^1[3|4|5|8|7][0-9]\d{8}$/
+    reg = /^1[3|4|5|8|7|9][0-9]\d{8}$/
     if not reg.test(mobile)
-      App.alert("不正确的手机号", $('#signup_form'))
+      App.alert("不正确的手机号", $('.login-box form'))
       return false
     
     # 防止重复点击
@@ -344,13 +344,16 @@ window.App =
       return
     $(el).data("loading", '1')
     
+    i = Utils.getRandomString(18)
+    ak = Utils.getAccessKey(i)
+    
     $.ajax
-      url:  auth_code_api,
+      url:  '/api/v1/auth_codes',
       type: "POST"
       data: { mobile: mobile, i: i, ak: ak }
       success: (re) -> 
         if re.code == 0
-          App.notice("获取验证码成功", $('#signup_form'))
+          App.notice("获取验证码成功", $('.login-box form'))
           
           # 计时器开始倒计时
           $(el).attr("disabled", true)
@@ -373,12 +376,13 @@ window.App =
           $(el).data("loading", '0')
           $(el).removeAttr("disabled")
           $(el).text("获取验证码")
-          App.alert(re.message, $('#signup_form'))
+          App.alert(re.message, $('.login-box form'))
       error: (re) ->
+        # console.log(re)
         $(el).data("loading", '0')
         $(el).removeAttr("disabled")
         $(el).text("获取验证码")
-        App.alert(re.message, $('#signup_form'))
+        App.alert('服务器异常', $('.login-box form'))
   
   deleteItem: (el) ->
     # result = confirm("您确定吗？")

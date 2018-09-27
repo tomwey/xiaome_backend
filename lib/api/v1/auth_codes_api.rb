@@ -54,21 +54,30 @@ module API
           return render_error(2003, "验证码生成错误，请重试") if code.blank?
           
           # 发送短信
-          tpl = "您的验证码是{code}【{company}】"
-          text = tpl.gsub('{code}', "#{code.code}")
-          text = text.gsub('{company}', "#{SiteConfig.company}")
-          RestClient.post("#{SiteConfig.sp_url}", "apikey=#{SiteConfig.sp_api_key}&mobile=#{mobile}&text=#{text}") { |response, request, result, &block|
-            resp = JSON.parse(response)
-            if resp['code'] == 0
-              # 发送成功，更新发送日志
-              log.update_attribute(:send_total, log.send_total + 1)
-              { code: 0, message: "ok" }
-            else
-              # 发送失败，更新每分钟发送限制
-              session.delete(key)
-              { code: -1, message: resp['msg'] }
-            end
-          }
+          msg = SendAliSms.send(mobile, code.code)
+          if msg.blank?
+            # 发送成功，更新发送日志
+            log.update_attribute(:send_total, log.send_total + 1)
+            { code: 0, message: "ok" }
+          else
+            session.delete(key)
+            { code: -1, message: msg }
+          end
+          # tpl = "您的验证码是{code}【{company}】"
+          # text = tpl.gsub('{code}', "#{code.code}")
+          # text = text.gsub('{company}', "#{SiteConfig.company}")
+          # RestClient.post("#{SiteConfig.sp_url}", "apikey=#{SiteConfig.sp_api_key}&mobile=#{mobile}&text=#{text}") { |response, request, result, &block|
+          #   resp = JSON.parse(response)
+          #   if resp['code'] == 0
+          #     # 发送成功，更新发送日志
+          #     log.update_attribute(:send_total, log.send_total + 1)
+          #     { code: 0, message: "ok" }
+          #   else
+          #     # 发送失败，更新每分钟发送限制
+          #     session.delete(key)
+          #     { code: -1, message: resp['msg'] }
+          #   end
+          # }
           
         end # end post
       end # end resource

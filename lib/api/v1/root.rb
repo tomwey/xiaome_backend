@@ -31,6 +31,7 @@ module API
         end
       end
       
+      mount API::V1::AuthCodesAPI
       mount API::V1::UsersAPI
       mount API::V1::RedpackAPI
       mount API::V1::PagesAPI
