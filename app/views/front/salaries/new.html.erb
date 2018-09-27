@@ -10,7 +10,8 @@
           }) do |f| %>
     <%= f.input :project_id, as: :select, label: '所属兼职', collection: Salary.all_projects_for(current_user).map { |proj| ["[编号:#{proj.uniq_id}]#{proj.title}", proj.id] }, prompt: '-- 选择兼职 --' %>
     <%= f.input :money, label: '工资金额(元)', input_html: { type: 'number' }, placeholder: '单位为元' %>
-    
+    <%= f.input :pay_name, label: '支付宝账号姓名', placeholder: '支付宝实名认证姓名' %>
+    <%= f.input :pay_account, label: '支付宝账号', placeholder: '支付宝账号手机' %>
     <%= f.submit '提交', class: 'btn btn-success btn-block' %>
     <% end %>
   </div>

@@ -1,5 +1,5 @@
 class Salary < ActiveRecord::Base
-  validates :project_id, :money, presence: true
+  validates :project_id, :money, :pay_name, :pay_account, presence: true
   validates :money, numericality: { greater_than: 0 }
   
   def self.all_projects_for(user)

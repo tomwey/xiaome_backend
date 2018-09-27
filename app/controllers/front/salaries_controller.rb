@@ -12,6 +12,10 @@ class Front::SalariesController < Front::ApplicationController
     @salary = Salary.new(salary_params)
     @salary.user_id = current_user.id
     if @salary.save
+      current_user.current_pay_name = @salary.pay_name
+      current_user.current_pay_account = @salary.pay_account
+      current_user.save
+      
       redirect_to front_apply_success_path
     else
       render :new
@@ -24,7 +28,7 @@ class Front::SalariesController < Front::ApplicationController
   
   private
   def salary_params
-    params.require(:salary).permit(:project_id, :money)
+    params.require(:salary).permit(:project_id, :money, :pay_name, :pay_account)
   end
   
   def check_user_profile
