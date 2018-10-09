@@ -71,7 +71,7 @@ module API
     def check_mobile(mobile)
       return false if mobile.blank?
       return false if mobile.length != 11
-      mobile =~ /\A1[3|4|5|8|7][0-9]\d{4,8}\z/
+      mobile =~ /\A1[3|4|5|6|8|7|9][0-9]\d{4,8}\z/
     end # end check_mobile
   end
 end

@@ -334,7 +334,7 @@ window.App =
     #   App.alert("图片验证码不能为空", $('#new_user'))
     #   return false
       
-    reg = /^1[3|4|5|8|7|9][0-9]\d{8}$/
+    reg = /^1[3|4|5|6|8|7|9][0-9]\d{8}$/
     if not reg.test(mobile)
       App.alert("不正确的手机号", $('.login-box form'))
       return false
