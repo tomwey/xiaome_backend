@@ -254,6 +254,14 @@
         name: '名称'
         sort: '显示顺序'
         opened: '是否使用'
+      salary:
+        id: 'ID'
+        uniq_id: '流水号'
+        money: '工资金额(元)'
+        pay_name: '支付宝账号姓名'
+        pay_account: '支付宝账号手机'
+        payed_at: '发放时间'
+        created_at: '申请时间'
     errors:
       models:
         user: "用户"

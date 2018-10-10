@@ -49,9 +49,7 @@ index do
     item "查看", [:admin, o]
     if current_admin_user.admin? && o.payed_at.blank?
       item "确认发放工资", confirm_pay_admin_salary_path(o), method: :put
-    end
-    item "编辑", edit_admin_salary_path(o)
-    if current_admin_user.admin? && o.payed_at.blank?
+      item "编辑", edit_admin_salary_path(o)
       item "删除", admin_salary_path(o), method: :delete, data: { confirm: '你确定吗？' }
     end
     
