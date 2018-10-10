@@ -1,6 +1,10 @@
 "zh-CN":
   active_admin:
     # powered_by: "Copyright 2016 农家"
+    scopes:
+      all: '全部'
+      unpayed: '未发放工资'
+      payed: '已发放工资'
     batch_actions:
       labels:
         block: "禁用"

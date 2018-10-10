@@ -23,6 +23,10 @@ filter :pay_name, label: '支付宝账号姓名'
 
 actions :all, except: [:new, :create]
 
+scope :unpayed, default: true
+scope :payed
+scope :all
+
 index do
   selectable_column
   column('#', :id)
