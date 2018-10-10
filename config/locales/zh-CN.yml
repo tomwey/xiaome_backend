@@ -262,6 +262,8 @@
         pay_account: '支付宝账号手机'
         payed_at: '发放时间'
         created_at: '申请时间'
+        project: '兼职项目'
+        user: '申请人'
     errors:
       models:
         user: "用户"

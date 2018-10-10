@@ -27,6 +27,18 @@ scope :unpayed, default: true
 scope :payed
 scope :all
 
+csv do
+  column :id
+  column :uniq_id
+  column :money
+  column(:project) { |s| "[编号:#{s.project.uniq_id}]#{s.project.title}" }
+  column(:user) { |s| "[#{s.user.mobile}]#{s.user.profile.try(:name)}" }
+  column :pay_name
+  column :pay_account
+  column :payed_at
+  column :created_at
+end
+
 index do
   selectable_column
   column('#', :id)
