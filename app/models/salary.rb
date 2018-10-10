@@ -1,6 +1,6 @@
 class Salary < ActiveRecord::Base
   validates :project_id, :money, :pay_name, :pay_account, presence: true
-  validates :money, numericality: { greater_than: 0 }
+  validates :money, numericality: { greater_than_or_equal_to: 0 }
   
   belongs_to :user
   belongs_to :project

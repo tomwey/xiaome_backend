@@ -15,3 +15,4 @@
         approve: '审核'
         cancel_approve: '取消审核'
         reject: '拒绝'
+        confirm_pay: '确认发放工资'

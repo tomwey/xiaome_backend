@@ -4,7 +4,7 @@ ActiveAdmin.register Salary do
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
-# permit_params :list, :of, :attributes, :on, :model
+permit_params :pay_account, :pay_name, :money
 #
 # or
 #
@@ -13,6 +13,15 @@ ActiveAdmin.register Salary do
 #   permitted << :other if params[:action] == 'create' && current_user.admin?
 #   permitted
 # end
+
+filter :project_id, as: :select, label: '兼职项目', collection: Project.where(opened: true).order('id desc').map { |p| [p.title, p.id] }
+filter :user_id, as: :select, label: '申请人', collection: User.order('id desc').map { |u| [u.mobile, u.id] }
+filter :money, label: '申请工资'
+filter :created_at, label: '申请时间'
+filter :pay_account, label: '支付宝账号手机'
+filter :pay_name, label: '支付宝账号姓名'
+
+actions :all, except: [:new, :create]
 
 index do
   selectable_column
@@ -37,6 +46,9 @@ index do
     if current_admin_user.admin? && o.payed_at.blank?
       item "确认发放工资", confirm_pay_admin_salary_path(o), method: :put
     end
+    item "编辑", edit_admin_salary_path(o)
+    item "删除", admin_salary_path(o), method: :delete, data: { confirm: '你确定吗？' }
+    
   end
   
 end
@@ -54,6 +66,16 @@ member_action :confirm_pay, method: :put do
   end
   
   redirect_to collection_path, notice: msg
+end
+
+form do |f|
+  f.semantic_errors
+  f.inputs do
+    f.input :money, label: '工资发放金额', input_html: { type: :number }
+    f.input :pay_account, label: '支付宝账号手机'
+    f.input :pay_name, label: '支付宝账号姓名'
+  end
+  actions
 end
 
 end
