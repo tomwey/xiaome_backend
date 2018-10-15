@@ -11,6 +11,8 @@ class AdminUser < ActiveRecord::Base
   
   # 管理员
   def admin?
+    puts SiteConfig.admin_managers.split(',')
+    puts SiteConfig.admin_managers.split(',').include?(self.email)
     super_admin? || SiteConfig.admin_managers.split(',').include?(self.email)
   end
   #
