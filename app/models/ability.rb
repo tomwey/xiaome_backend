@@ -13,6 +13,7 @@ class Ability
       can :update, AdminUser do |admin|
         admin.id == user.id
       end
+      can :destroy, :Salary
     else
       can :read, :all
       cannot :read, SiteConfig
