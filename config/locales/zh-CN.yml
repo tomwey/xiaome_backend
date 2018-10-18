@@ -38,7 +38,7 @@
       attachment: '附件'
       message_template: '消息模板'
       message: '消息'
-      admin_user: '登录账号'
+      admin_user: '后台管理员账号'
       recharge: '充值'
       pay_log: '交易明细'
       area: '区域'
