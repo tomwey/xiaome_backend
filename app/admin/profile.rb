@@ -14,7 +14,7 @@ ActiveAdmin.register Profile do
 #   permitted
 # end
 
-action :all, except: [:new, :create]
+actions :all, except: [:new, :create]
 
 csv do
   column :id
