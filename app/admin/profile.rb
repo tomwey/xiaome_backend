@@ -21,15 +21,14 @@ csv do
   column('用户ID') { |s| s.user.try(:uid) }
   column :name
   column('登录手机') { |s| s.user.try(:mobile).to_s }
-  column('账号注册时间') { |s| s.user.try(:created_at) }
-  column(:idcard) { |s| s.idcard.to_s }
+  column(:idcard) { |s| s.idcard.to_s + ' ' }
   column :phone
   column :sex
   column :birth
-  column :is_student
+  column(:is_student) { |s| s.is_student ? '在读' : '--' }
   column :college
   column :specialty
-  column :created_at
+  column('账号注册时间') { |s| s.user.try(:created_at) }
 end
 
 index do
@@ -42,9 +41,7 @@ index do
   column '登录手机' do |o|
     o.user.try(:mobile)
   end
-  column '账号注册时间' do |o|
-    o.user.try(:created_at)
-  end
+  
   column :idcard, sortable: false
   column :phone
   column :sex, sortable: false
@@ -52,7 +49,9 @@ index do
   column :is_student, sortable: false
   column :college, sortable: false
   column :specialty, sortable: false
-  column :created_at
+  column '账号注册时间' do |o|
+    o.user.try(:created_at)
+  end
   
   actions
   
