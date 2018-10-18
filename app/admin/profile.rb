@@ -21,7 +21,7 @@ csv do
   column('用户ID') { |s| s.user.try(:uid) }
   column :name
   column('登录手机') { |s| s.user.try(:mobile).to_s }
-  column(:idcard) { |s| s.idcard.to_s + ' ' }
+  column(:idcard) { |s| '身份证: ' + s.idcard.to_s }
   column :phone
   column :sex
   column :birth
