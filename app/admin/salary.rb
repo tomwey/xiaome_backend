@@ -44,7 +44,7 @@ index do
   column('#', :id)
   column '流水号', :uniq_id
   column '用户', sortable: false do |o|
-    link_to o.user.try(:profile).try(:name), [:admin, o.user]
+    link_to o.user.try(:profile).try(:name), [:admin, o.user.try(:profile)]
   end
   column '兼职', sortable: false do |o|
     link_to o.project.try(:title), [:admin, o.project]
