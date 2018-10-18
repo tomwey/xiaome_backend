@@ -20,9 +20,9 @@ csv do
   column :id
   column('用户ID') { |s| s.user.try(:uid) }
   column :name
-  column('登录手机') { |s| s.user.try(:mobile) }
+  column('登录手机') { |s| s.user.try(:mobile).to_s }
   column('账号注册时间') { |s| s.user.try(:created_at) }
-  column :idcard
+  column(:idcard) { |s| s.idcard.to_s }
   column :phone
   column :sex
   column :birth
