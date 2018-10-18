@@ -50,7 +50,7 @@
       catalog: '分类'
       salary: '工资发放申请'
       project: '兼职'
-      profile: '用户基本资料'
+      profile: '用户资料'
     attributes:
       user:
         uid: 'ID'
@@ -67,15 +67,32 @@
         created_at: '注册时间'
         total_prize_count: '抽奖总次数'
         prized_count: '抽过的次数'
+      profile:
+        name: '姓名'
+        sex: '性别'
+        birth: '生日'
+        phone: '电话'
+        idcard: '身份证'
+        is_student: '是否在读'
+        college: '学校'
+        specialty: '专业'
+        created_at: '创建时间'
+        updated_at: '更新时间'
       message:
         message_template_id: '所属模板'
         content: '内容'
         link: '消息链接地址'
         to_users: '消息接收人'
       project:
-        title: '简介'
-        body: '内容描述'
+        id: '#'
+        uniq_id: '编号'
+        title: '兼职简介'
+        body: '兼职描述'
         money: '工资金额'
+        opened: '是否打开'
+        sort: '显示顺序'
+        created_at: '创建时间'
+        updated_at: '更新时间'
       
       banner:
         image: '封面图'

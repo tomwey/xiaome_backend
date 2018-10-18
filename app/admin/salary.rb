@@ -42,7 +42,7 @@ end
 index do
   selectable_column
   column('#', :id)
-  column 'ID', :uniq_id
+  column '流水号', :uniq_id
   column '用户', sortable: false do |o|
     link_to o.user.try(:profile).try(:name), [:admin, o.user]
   end
