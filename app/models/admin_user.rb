@@ -5,6 +5,11 @@ class AdminUser < ActiveRecord::Base
          # :recoverable,
          :rememberable, :trackable, :validatable
   
+  has_and_belongs_to_many :permissions
+  
+  validates :password, :password_confirmation, presence: true, on: :create
+  validates :password, confirmation: true
+  
   def super_admin?
     Setting.admin_emails.include?(self.email)
   end
@@ -12,6 +17,10 @@ class AdminUser < ActiveRecord::Base
   # 管理员
   def admin?
     super_admin? || SiteConfig.admin_managers.split(',').include?(self.email)
+  end
+  
+  def password_required?
+    false
   end
   #
   # # 站点编辑人员

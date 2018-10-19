@@ -1,11 +1,17 @@
 ActiveAdmin.register AdminUser do
-  menu parent: 'system', label: '后台管理员账号', priority: 1
+  menu label: '后台管理员账号', priority: 100
   
-  permit_params :email, :password, :password_confirmation
+  permit_params :email, :password, :password_confirmation, permission_ids: []
   
   config.filters = false
   
   actions :all, except: [:show]
+  
+  controller do
+    def scoped_collection
+      current_admin_user.super_admin? ? AdminUser.all : AdminUser.where.not(email: Setting.admin_emails)
+    end
+  end
   
   index do
     selectable_column
@@ -13,6 +19,13 @@ ActiveAdmin.register AdminUser do
     column :email
     column :current_sign_in_at
     column :sign_in_count
+    column '拥有权限' do |o|
+      if o.super_admin?
+        '所有权限'
+      else
+        raw(o.permissions.all.map { |p| ["#{p.action_name}#{p.func_name}"] }.join('<br>'))
+      end
+    end
     column :created_at
     actions
   end
@@ -43,6 +56,10 @@ ActiveAdmin.register AdminUser do
       end
       f.input :password
       f.input :password_confirmation
+      if current_admin_user.super_admin? or current_admin_user.permissions.map { |o| ["#{o.func_class}##{o.action}"] }.include?("AdminUser#update")
+      f.input :permission_ids, as: :check_boxes, label: '权限设置', collection: Permission.all.map { |o| ["#{o.action_name}#{o.func_name}", o.id] }
+      end
+      
       # f.input :role, as: :radio, collection: Admin.roles.map { |role| [I18n.t("common.#{role}"), role] }
     end
     f.actions

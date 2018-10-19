@@ -52,6 +52,7 @@
       project: '兼职'
       profile: '用户资料'
       permission_resource: '权限资源'
+      permission: '权限点'
     attributes:
       user:
         uid: 'ID'
@@ -87,6 +88,11 @@
         action_names: '权限功能中文名'
         sort: '排序'
         opened: '是否开启'
+      permission:
+        action: '权限操作'
+        action_name: '权限操作中文名'
+        memo: '备注'
+        need_scope: '是否要限制账号范围'
       message:
         message_template_id: '所属模板'
         content: '内容'
