@@ -1,5 +1,5 @@
 ActiveAdmin.register SiteConfig do
-  menu parent: 'system', priority: 2, label: '站点配置'
+  menu priority: 2, label: '站点配置'
   
   active_admin_import validate: true,
             template_object: ActiveAdminImport::Model.new(

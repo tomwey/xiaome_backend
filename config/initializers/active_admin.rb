@@ -8,7 +8,7 @@ ActiveAdmin.setup do |config|
   
   config.namespace :admin do |admin|
     admin.build_menu do |menu|
-      # menu.add id: 'system',      label: '系统功能',        priority: 2
+      menu.add id: 'system',      label: '系统管理',        priority: 100
       # menu.add id: 'vote',        label: '投票功能',        priority: 10
       # menu.add id: 'game',        label: '游戏管理',        priority: 3
       # menu.add id: 'agent',       label: '代理系统',        priority: 4

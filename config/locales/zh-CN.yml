@@ -51,6 +51,7 @@
       salary: '工资发放申请'
       project: '兼职'
       profile: '用户资料'
+      permission_resource: '权限资源'
     attributes:
       user:
         uid: 'ID'
@@ -78,6 +79,14 @@
         specialty: '专业'
         created_at: '创建时间'
         updated_at: '更新时间'
+      permission_resource:
+        id: 'ID'
+        func_name: '资源中文名'
+        func_class: '资源类名(class)'
+        actions: '权限功能'
+        action_names: '权限功能中文名'
+        sort: '排序'
+        opened: '是否开启'
       message:
         message_template_id: '所属模板'
         content: '内容'
