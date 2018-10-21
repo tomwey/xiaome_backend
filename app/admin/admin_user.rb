@@ -57,7 +57,8 @@ ActiveAdmin.register AdminUser do
       f.input :password
       f.input :password_confirmation
       if current_admin_user.super_admin? or current_admin_user.permissions.map { |o| ["#{o.func_class}##{o.action}"] }.include?("AdminUser#update")
-      f.input :permission_ids, as: :check_boxes, label: '权限设置', collection: Permission.all.map { |o| ["#{o.action_name}#{o.func_name}", o.id] }
+      # f.input :permission_ids, as: :check_boxes, label: '权限设置', collection: Permission.all.map { |o| ["#{o.action_name}#{o.func_name}", o.id] }
+      render partial: 'permission_field', locals: { f: f } 
       end
       
       # f.input :role, as: :radio, collection: Admin.roles.map { |role| [I18n.t("common.#{role}"), role] }
