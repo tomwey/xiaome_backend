@@ -18,22 +18,22 @@ module API
       end
       
       # 用户基本信息
-      class UserProfile < UserBase
-        # expose :uid, format_with: :null
-        expose :mobile, format_with: :null
-        expose :nickname do |model, opts|
-          model.format_nickname
-        end
-        expose :avatar do |model, opts|
-          model.real_avatar_url
-        end
-        expose :nb_code, as: :invite_code
-        expose :earn, format_with: :money_format
-        expose :balance, format_with: :money_format
-        expose :today_earn, format_with: :money_format
-        expose :wx_id, format_with: :null
-        unexpose :private_token, as: :token
-      end
+      # class UserProfile < UserBase
+      #   # expose :uid, format_with: :null
+      #   expose :mobile, format_with: :null
+      #   expose :nickname do |model, opts|
+      #     model.format_nickname
+      #   end
+      #   expose :avatar do |model, opts|
+      #     model.real_avatar_url
+      #   end
+      #   expose :nb_code, as: :invite_code
+      #   expose :earn, format_with: :money_format
+      #   expose :balance, format_with: :money_format
+      #   expose :today_earn, format_with: :money_format
+      #   expose :wx_id, format_with: :null
+      #   unexpose :private_token, as: :token
+      # end
       
       class AppVersion < Base
         expose :version
