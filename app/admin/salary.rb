@@ -72,7 +72,7 @@ index do
     
     item "编辑", edit_admin_salary_path(o) if authorized?(:edit, o)
     item "删除", admin_salary_path(o), method: :delete, data: { confirm: '你确定吗？' } if authorized?(:destroy, o)
-    item "确认发放工资", confirm_pay_admin_salary_path(o), method: :put if authorized?(:confirm_pay, o)
+    item "确认发放工资", confirm_pay_admin_salary_path(o), method: :put if o.approved? and authorized?(:confirm_pay, o)
     item "审核通过", approve_admin_salary_path(o), method: :put if o.can_approve? and authorized?(:approve, o)
     item "审核驳回", reject_admin_salary_path(o), method: :put if o.can_reject? and authorized?(:reject, o)
     # end
