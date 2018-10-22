@@ -153,8 +153,8 @@ module API
         expose :project, using: API::V1::Entities::Project
         expose :pay_name, :pay_account
         expose :money, format_with: :money_format
-        expose :created_at, as: :time
-        expose :payed_at, as: :pay_time
+        expose :created_at, as: :time, format_with: :chinese_datetime
+        expose :payed_at, as: :pay_time, format_with: :chinese_datetime
         expose :state, :state_name
       end
       
