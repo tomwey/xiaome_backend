@@ -114,7 +114,7 @@ class User < ActiveRecord::Base
   end
   
   def senting_salary_money
-    @money ||= salaries.where(payed_at: nil).sum(:money)
+    @money ||= salaries.where(payed_at: nil, state: 'approved').sum(:money)
   end
   
   def wx_bind
