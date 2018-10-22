@@ -25,7 +25,7 @@ class Salary < ActiveRecord::Base
   end 
   
   def state_name
-    name = case o.state
+    name = case self.state
     when 'pending' then '待审核'
     when 'approved' then '已审核'
     when 'rejected' then '被驳回'
