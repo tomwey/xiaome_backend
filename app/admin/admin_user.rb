@@ -5,7 +5,7 @@ ActiveAdmin.register AdminUser do
   
   permit_params do
     params = [:email, :password, :password_confirmation]
-    params.push permission_ids: [] if current_admin_user.admin?
+    params.push permission_ids: [] if current_admin_user.admin? or authorized?(:set_permissions, AdminUser)
     params
   end
   
@@ -17,6 +17,12 @@ ActiveAdmin.register AdminUser do
     def scoped_collection # 过滤站长账号
       current_admin_user.super_admin? ? AdminUser.all : AdminUser.where.not(email: Setting.admin_emails)
     end
+    
+    def update_resource(object, attributes)
+      authorize! :set_permissions, object
+      super(object, attributes)
+    end
+    
   end
   
   index do
@@ -62,9 +68,8 @@ ActiveAdmin.register AdminUser do
       end
       f.input :password
       f.input :password_confirmation
-      if current_admin_user.super_admin? or current_admin_user.permissions.map { |o| ["#{o.func_class}##{o.action}"] }.include?("AdminUser#update")
-      # f.input :permission_ids, as: :check_boxes, label: '权限设置', collection: Permission.all.map { |o| ["#{o.action_name}#{o.func_name}", o.id] }
-      render partial: 'permission_field', locals: { f: f } 
+      if current_admin_user.admin? or authorized?(:set_permissions, f.object)
+        render partial: 'permission_field', locals: { f: f } 
       end
       
       # f.input :role, as: :radio, collection: Admin.roles.map { |role| [I18n.t("common.#{role}"), role] }

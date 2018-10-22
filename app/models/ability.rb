@@ -7,16 +7,22 @@ class Ability
     if user.super_admin?
       can :manage, :all
     else
-      user.permissions.each do |permission|
-        if permission.need_scope
-          can permission.action.to_sym, (permission.func_class == 'all' ? permission.func_class.to_sym : permission.func_class.constantize), id: user.id
-        else
-          can permission.action.to_sym, (permission.func_class == 'all' ? permission.func_class.to_sym : permission.func_class.constantize)
+      if user.admin?
+        can :manage, :all
+        cannot :manage, SiteConfig
+        cannot :manage, PermissionResource
+      else
+        user.permissions.each do |permission|
+          if permission.need_scope
+            can permission.action.to_sym, (permission.func_class == 'all' ? permission.func_class.to_sym : permission.func_class.constantize), id: user.id
+          else
+            can permission.action.to_sym, (permission.func_class == 'all' ? permission.func_class.to_sym : permission.func_class.constantize)
+          end
         end
+        can :update, AdminUser, id: user.id
+        
       end
     end
-    
-    can :update, AdminUser, id: user.id
     
     # if user.super_admin?
     #   can :manage, :all

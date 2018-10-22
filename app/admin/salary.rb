@@ -70,12 +70,15 @@ index do
 end
 
 batch_action :confirm_pay do |ids|
+  authorize! :confirm_pay, Salary
   batch_action_collection.find(ids).each do |e|
     e.confirm_pay!
   end
   redirect_to collection_path, alert: "已发放"
 end
+
 member_action :confirm_pay, method: :put do
+  authorize! :confirm_pay, resource
   msg = resource.confirm_pay!
   if msg.blank?
     msg = '发放成功'
