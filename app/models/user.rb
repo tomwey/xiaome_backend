@@ -105,6 +105,18 @@ class User < ActiveRecord::Base
     end
   end
   
+  def total_salary_money
+    @mm ||= salaries.sum(:money)
+  end
+  
+  def sent_salary_money
+    @m2 ||= salaries.where.not(payed_at: nil).sum(:money)
+  end
+  
+  def senting_salary_money
+    @money ||= salaries.where(payed_at: nil).sum(:money)
+  end
+  
   def wx_bind
     AuthProfile.where(user_id: self.uid, provider: 'wechat').count > 0
   end

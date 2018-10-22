@@ -99,6 +99,10 @@ module API
         end
         expose :current_pay_name, as: :pay_name
         expose :current_pay_account, as: :pay_account
+        unexpose :private_token, as: :token
+        expose :total_salary_money, as: :total_money, format_with: :money_format
+        expose :sent_salary_money, as: :payed_money, format_with: :money_format
+        expose :senting_salary_money, as: :unpayed_money, format_with: :money_format
       end
       # 用户详情
       class User < UserBase
@@ -135,6 +139,23 @@ module API
         expose :avatar do |model, opts|
           model.format_avatar_url
         end
+      end
+      
+      class Project < Base
+        expose :uniq_id, as: :id
+        expose :title
+        expose :money
+        
+      end
+      
+      class Salary < Base
+        expose :uniq_id, as: :id
+        expose :project, using: API::V1::Entities::Project
+        expose :pay_name, :pay_account
+        expose :money, format_with: :money_format
+        expose :created_at, as: :time
+        expose :payed_at, as: :pay_time
+        expose :state, :state_name
       end
       
       class SimplePage < Base

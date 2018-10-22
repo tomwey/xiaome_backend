@@ -57,13 +57,7 @@ index do
     o.created_at.strftime('%Y年%m月%d日 %H:%M')
   end
   column '状态' do |o|
-    case o.state
-    when 'pending' then '待审核'
-    when 'approved' then '已审核'
-    when 'rejected' then '被驳回'
-    when 'payed' then '已发放'
-    else ''
-    end
+    o.state_name
   end
   
   actions defaults: false do |o|
