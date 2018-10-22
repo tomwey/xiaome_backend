@@ -18,7 +18,7 @@ class Salary < ActiveRecord::Base
   
   def self.all_projects_for(user)
     proj_ids = Salary.where(user_id: user.id).pluck(:project_id)
-    Project.where(opened: true).where.not(id: proj_ids)
+    Project.where(opened: true).where.not(id: proj_ids).order('id desc').limit(5)
   end
   
   def confirm_pay!
