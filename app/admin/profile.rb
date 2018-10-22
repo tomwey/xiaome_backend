@@ -41,14 +41,16 @@ index do
   column '登录手机' do |o|
     o.user.try(:mobile)
   end
-  
-  column :idcard, sortable: false
-  column :phone
-  column :sex, sortable: false
-  column :birth, sortable: false
+  column '工资信息' do |o|
+    raw("已领取工资: #{o.payed_salary}<br>未领取工资: #{o.unpayed_salary}")
+  end
+  column '基本信息' do |o|
+    raw("身份证: #{o.idcard}<br>电话: #{o.phone}<br>性别: #{o.sex}<br>生日: #{o.birth}")
+  end
   column :is_student, sortable: false
-  column :college, sortable: false
-  column :specialty, sortable: false
+  column '学校/专业' do |o|
+    raw("学校: #{o.college}<br>专业: #{o.specialty}")
+  end
   column '账号注册时间' do |o|
     o.user.try(:created_at)
   end
@@ -56,5 +58,47 @@ index do
   actions
   
 end
+
+# show do
+#   attributes_table do
+#     row :title
+#     row :money
+#     row :body do |o|
+#       simple_format o.body
+#     end
+#
+#     row :opened
+#     row :created_at
+#     row :updated_at
+#   end
+#
+#   panel "工资发放记录" do
+#     table_for project.salaries.order('id desc') do
+#
+#       # selectable_column
+#       column('#', :id)
+#       column '流水号', :uniq_id
+#       column '用户', sortable: false do |o|
+#         link_to o.user.try(:profile).try(:name), [:admin, o.user.try(:profile)]
+#       end
+#       column '支付宝账号', :pay_account, sortable: false
+#       column '支付宝姓名', :pay_name, sortable: false
+#       column '工资金额(元)', :money
+#       column('确认发放时间', :payed_at)
+#       column '申请发放时间' do |o|
+#         o.created_at.strftime('%Y年%m月%d日 %H:%M:%S')
+#       end
+#
+#       # column '操作', class: 'col-actions' do |o|
+#       #   div class: 'table_actions' do
+#       #     link_to '审核通过', '#'
+#       #   end
+#       #   # item "查看", [:admin, o]
+#       # end
+#
+#     end
+#   end
+#
+# end
 
 end
