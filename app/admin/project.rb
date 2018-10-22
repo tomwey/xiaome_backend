@@ -31,7 +31,7 @@ index do
     item "查看", [:admin, o] if authorized?(:read, o)
     item "编辑", edit_admin_project_path(o) if authorized?(:update, o)
     item "删除", admin_project_path(o), method: :delete, data: { confirm: '你确定吗？' } if authorized?(:destroy, o)
-    item "确认发放工资", confirm_pay_admin_project_path(o), method: :put, data: { confirm: '你确定吗？' } if authorized?(:confirm_pay, o)
+    item "确认发放工资", confirm_pay_admin_project_path(o), method: :put, data: { confirm: '你确定吗？' } if authorized?(:confirm_pay, o) and o.senting_salary_money > 0.0
 
   end
   

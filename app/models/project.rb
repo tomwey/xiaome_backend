@@ -17,15 +17,15 @@ class Project < ActiveRecord::Base
   end
   
   def total_salary_money
-    salaries.sum(:money)
+    @mm ||= salaries.sum(:money)
   end
   
   def sent_salary_money
-    salaries.where.not(payed_at: nil).sum(:money)
+    @m2 ||= salaries.where.not(payed_at: nil).sum(:money)
   end
   
   def senting_salary_money
-    salaries.where(payed_at: nil, state: 'approved').sum(:money)
+    @money ||= salaries.where(payed_at: nil, state: 'approved').sum(:money)
   end
   
 end
