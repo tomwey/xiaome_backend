@@ -54,15 +54,27 @@ index do
   column '工资金额(元)', :money
   column('确认发放时间', :payed_at)
   column '申请发放时间' do |o|
-    o.created_at.strftime('%Y年%m月%d日 %H:%M:%S')
+    o.created_at.strftime('%Y年%m月%d日 %H:%M')
+  end
+  column '状态' do |o|
+    case o.state
+    when 'pending' then '待审核'
+    when 'approved' then '已审核'
+    when 'rejected' then '被驳回'
+    when 'payed' then '已发放'
+    else ''
+    end
   end
   
   actions defaults: false do |o|
     item "查看", [:admin, o] if authorized?(:read, o)
     # if current_admin_user.admin? && o.payed_at.blank?
-    item "确认发放工资", confirm_pay_admin_salary_path(o), method: :put if authorized?(:confirm_pay, o)
+    
     item "编辑", edit_admin_salary_path(o) if authorized?(:edit, o)
     item "删除", admin_salary_path(o), method: :delete, data: { confirm: '你确定吗？' } if authorized?(:destroy, o)
+    item "确认发放工资", confirm_pay_admin_salary_path(o), method: :put if authorized?(:confirm_pay, o)
+    item "审核通过", approve_admin_salary_path(o), method: :put if o.can_approve? and authorized?(:approve, o)
+    item "审核驳回", reject_admin_salary_path(o), method: :put if o.can_reject? and authorized?(:reject, o)
     # end
     
   end
@@ -85,6 +97,34 @@ member_action :confirm_pay, method: :put do
   end
   
   redirect_to collection_path, notice: msg
+end
+
+batch_action :approve do |ids|
+  authorize! :approve, Salary
+  batch_action_collection.find(ids).each do |e|
+    e.approve
+  end
+  redirect_to collection_path, alert: "全部审核通过"
+end
+
+batch_action :reject do |ids|
+  authorize! :reject, Salary
+  batch_action_collection.find(ids).each do |e|
+    e.reject
+  end
+  redirect_to collection_path, alert: "审核未通过"
+end
+
+member_action :approve, method: :put do
+  authorize! :approve, resource
+  resource.approve
+  redirect_to collection_path, notice: '审核通过'
+end
+
+member_action :reject, method: :put do
+  authorize! :reject, resource
+  resource.reject
+  redirect_to collection_path, notice: '审核不通过'
 end
 
 form do |f|

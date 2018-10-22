@@ -77,6 +77,15 @@ show do
       column '申请发放时间' do |o|
         o.created_at.strftime('%Y年%m月%d日 %H:%M:%S')
       end
+      column '状态' do |o|
+        case o.state
+        when 'pending' then '待审核'
+        when 'approved' then '已审核'
+        when 'rejected' then '被驳回'
+        when 'payed' then '已发放'
+        else ''
+        end
+      end
       
       # column '操作', class: 'col-actions' do |o|
       #   div class: 'table_actions' do

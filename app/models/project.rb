@@ -25,7 +25,7 @@ class Project < ActiveRecord::Base
   end
   
   def senting_salary_money
-    salaries.where(payed_at: nil).sum(:money)
+    salaries.where(payed_at: nil, state: 'approved').sum(:money)
   end
   
 end

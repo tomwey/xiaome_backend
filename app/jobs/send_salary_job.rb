@@ -6,7 +6,7 @@ class SendSalaryJob < ActiveJob::Base
     @project = Project.find_by(id: project_id)
     return if @project.blank? or !@project.opened
     
-    @salaries = @project.salaries.where(payed_at: nil)
+    @salaries = @project.salaries.where(payed_at: nil, state: 'approved')
     @salaries.each do |salary|
       salary.confirm_pay!
     end
