@@ -1,7 +1,13 @@
 ActiveAdmin.register AdminUser do
   menu label: '后台管理员账号', priority: 100
   
-  permit_params :email, :password, :password_confirmation, permission_ids: []
+  # permit_params :email, :password, :password_confirmation, permission_ids: []
+  
+  permit_params do
+    params = [:email, :password, :password_confirmation]
+    params.push permission_ids: [] if current_admin_user.admin?
+    params
+  end
   
   config.filters = false
   
