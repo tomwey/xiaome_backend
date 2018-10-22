@@ -24,4 +24,8 @@ class Project < ActiveRecord::Base
     salaries.where.not(payed_at: nil).sum(:money)
   end
   
+  def senting_salary_money
+    salaries.where(payed_at: nil).sum(:money)
+  end
+  
 end

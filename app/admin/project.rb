@@ -1,6 +1,6 @@
 ActiveAdmin.register Project do
   
-  menu label: '兼职'
+  menu label: '兼职管理'
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
@@ -20,24 +20,19 @@ index do
   column '编号', :uniq_id
   column :title, sortable: false
   column '兼职工资价格', :money
-  column '工资发放总金额' do |o|
-    o.total_salary_money
-  end
-  column '已发工资总额' do |o|
-    o.sent_salary_money
-  end
-  
   column :opened, sortable: false
   column :created_at
   
+  column '工资汇总 (元)' do |o|
+    raw("工资发放总额: #{o.total_salary_money}<br>已发工资总额: #{o.sent_salary_money}<br>待发工资总额: #{o.senting_salary_money}")
+  end
+  
   actions defaults: false do |o|
     item "查看", [:admin, o]
-    # if current_admin_user.admin? && o.payed_at.blank?
     item "编辑", edit_admin_project_path(o)
     item "删除", admin_project_path(o), method: :delete, data: { confirm: '你确定吗？' }
     item "确认发放工资", confirm_pay_admin_project_path(o), method: :put, data: { confirm: '你确定吗？' }
-    # end
-    
+
   end
   
 end
@@ -54,13 +49,20 @@ show do
     row :body do |o|
       simple_format o.body
     end
+    row '工资发放总额' do |o|
+      o.total_salary_money
+    end
+    row '已发工资总额' do |o|
+      o.sent_salary_money
+    end
     row :opened
     row :created_at
     row :updated_at
   end
   
-  panel "工资发放申请记录" do
-    table_for project.salaries do
+  panel "工资发放记录" do
+    table_for project.salaries.order('id desc') do
+      
       # selectable_column
       column('#', :id)
       column '流水号', :uniq_id
@@ -75,20 +77,16 @@ show do
         o.created_at.strftime('%Y年%m月%d日 %H:%M:%S')
       end
       
-      
-  
-      # actions defaults: false do |o|
-      #   item "查看", [:admin, o]
-      #   if current_admin_user.admin? && o.payed_at.blank?
-      #     item "确认发放工资", confirm_pay_admin_salary_path(o), method: :put
-      #     item "编辑", edit_admin_salary_path(o)
-      #     item "删除", admin_salary_path(o), method: :delete, data: { confirm: '你确定吗？' }
+      # column '操作', class: 'col-actions' do |o|
+      #   div class: 'table_actions' do
+      #     link_to '审核通过', '#'
       #   end
-      #
+      #   # item "查看", [:admin, o]
       # end
       
     end
   end
+  
 end
 
 form do |f|

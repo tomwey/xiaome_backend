@@ -1,6 +1,6 @@
 ActiveAdmin.register Salary do
   
-  menu label: '工资发放'
+  menu label: '工资发放申请'
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
