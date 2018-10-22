@@ -56,6 +56,34 @@ module API
       
       # 用户账号管理
       resource :account, desc: "注册登录接口" do
+        desc "用户登录"
+        params do
+          requires :mobile, type: String, desc: '手机号'
+          requires :code,   type: String, desc: '验证码'
+        end
+        post :login do
+          mobile = params[:mobile]
+          code = params[:code]
+          
+          @code = AuthCode.where(mobile: mobile, code: code, activated_at: nil).first
+          if @code.blank?
+            return render_error(5005, '验证码不正确')
+          else
+            @user = User.where(mobile: mobile).first_or_create!
+      
+            @code.activated_at = Time.zone.now
+            @code.save!
+            
+            has_bind_profile = @user.profile.present?
+            
+            return { code: 0, message: 'ok', data: {
+              token: @user.private_token,
+              is_bind: has_bind_profile
+            } }
+          end
+          
+        end # end post login
+        
         desc "APP用户简单注册"
         params do
           requires :uuid,  type: String, desc: '用户设备唯一ID'
@@ -102,8 +130,61 @@ module API
         end
         get :me do
           user = authenticate!
-          render_json(user, API::V1::Entities::User)
+          render_json(user, API::V1::Entities::UserProfile)
         end # end get me
+        
+        desc "新增、修改个人资料"
+        params do
+          requires :token, type: String, desc: "用户认证Token"
+          optional :pid,   type: Integer, desc: '个人资料ID'
+          optional :idcard,type: String, desc: '身份证'
+          optional :name,  type: String, desc: '名字'
+          optional :sex,   type: String, desc: '性别'
+          optional :birth,  type: String, desc: '生日'
+          optional :phone,   type: String, desc: '电话'
+          optional :is_student,type: Integer, desc: '是否在读，0或者1'
+          optional :college,   type: String, desc: '学校'
+          optional :specialty,  type: String, desc: '专业'
+        end
+        post :save_profile do
+          user = authenticate!
+          
+          pid = params[:pid]
+          if pid.blank?
+            # 新增
+            if params[:idcard].blank? or params[:name].blank? or params[:sex].blank?
+              return render_error(-1, '身份证、姓名、性别三个字段必填')
+            end
+            @profile = Profile.new(user_id: user.id, 
+                            idcard: params[:idcard],
+                            name: params[:name],
+                            sex: params[:sex],
+                            birth: params[:birth],
+                            phone: params[:phone],
+                            college: params[:college],
+                            specialty: params[:specialty]
+                            )
+            if params[:is_student]
+              @profile.is_student = params[:is_student] == 1 ? true : false
+            end
+            @profile.save!
+            
+          else
+            # 修改
+            @profile = user.profile
+            @profile.idcard = params[:idcard] if params[:idcard]
+            @profile.name = params[:name] if params[:name]
+            @profile.sex = params[:sex] if params[:sex]
+            @profile.phone = params[:phone] if params[:phone]
+            @profile.birth = params[:birth] if params[:birth]
+            @profile.college = params[:college] if params[:college]
+            @profile.specialty = params[:specialty] if params[:specialty]
+            @profile.is_student = (params[:is_student] == 1) if params[:is_student]
+            @profile.save!
+          end
+          
+          render_json(user, API::V1::Entities::UserProfile)
+        end # end post save profile
         
         desc "交易明细"
         params do

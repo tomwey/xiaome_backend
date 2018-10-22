@@ -67,6 +67,39 @@ module API
         expose :provider, using: API::V1::Entities::MediaProvider
       end
       
+      # 用户资料
+      class UserProfile < UserBase
+        expose :pid do |model,opts|
+          model.profile.try(:id)
+        end
+        expose :mobile, format_with: :null
+        expose :name do |model, opts|
+          model.profile.try(:name)
+        end
+        expose :idcard do |model, opts|
+          model.profile.try(:idcard)
+        end
+        expose :phone do |model, opts|
+          model.profile.try(:phone)
+        end
+        expose :sex do |model, opts|
+          model.profile.try(:sex)
+        end
+        expose :birth do |model, opts|
+          model.profile.try(:birth)
+        end
+        expose :is_student do |model, opts|
+          model.profile.try(:is_student)
+        end
+        expose :college do |model, opts|
+          model.profile.try(:college)
+        end
+        expose :specialty do |model, opts|
+          model.profile.try(:specialty)
+        end
+        expose :current_pay_name, as: :pay_name
+        expose :current_pay_account, as: :pay_account
+      end
       # 用户详情
       class User < UserBase
         expose :uid, as: :id
