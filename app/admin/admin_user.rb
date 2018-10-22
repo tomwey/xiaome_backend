@@ -14,7 +14,7 @@ ActiveAdmin.register AdminUser do
   actions :all, except: [:show]
   
   controller do
-    def scoped_collection
+    def scoped_collection # 过滤站长账号
       current_admin_user.super_admin? ? AdminUser.all : AdminUser.where.not(email: Setting.admin_emails)
     end
   end
