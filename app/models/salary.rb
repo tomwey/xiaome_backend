@@ -42,17 +42,17 @@ class Salary < ActiveRecord::Base
     # # return '不正确的工资核对表文件' if spreadsheet.blank?
     #
     header = ['name', 'phone', 'money']
+    arr = []
     (1..spreadsheet.last_row).map do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
+      arr << row
       # puts "#{row['name']},#{row['phone']},#{row['money']}"
-      user_ids = Profile.where(phone: row['phone'].to_i, name: row['name']).pluck(:user_id)
-      puts user_ids
-      @salaries = Salary.where(user_id: user_ids, payed_at: nil, money: row['money'].to_f).all
-      puts @salaries
-      if @salaries.any?
-        @salaries.map { |salary| salary.update(state: 'approved') }
-      end
+      
     end
+    
+    ImportSalaryJob.perform_later(arr)
+    
+    return ''
     
   end
   
