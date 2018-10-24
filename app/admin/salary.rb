@@ -51,11 +51,15 @@ end
 
 collection_action :do_import_excel, method: :post do
   authorize! :import_excel, Salary
+  if !params[:salary_file]
+    redirect_to collection_path, alert: '文件不能为空'
+    return 
+  end
   
   msg = Salary.load_excel_data(params[:salary_file])
-  if msg.blank?
-    msg = '工资核对完成'
-  end
+  # if msg.blank?
+  #   msg = '工资核对完成'
+  # end
   
   if msg.blank?
     redirect_to collection_path, notice: '工资核对表上传成功，正在核对...'
