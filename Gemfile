@@ -119,6 +119,13 @@ gem 'redactor-rails'
 
 gem 'simple_form'
 
+# 导出Excel
+gem 'rubyzip', '= 1.0.0'
+gem 'axlsx', '= 2.0.1'
+gem 'axlsx_rails'
+# gem 'rubyzip', '< 1.0.0'
+# gem 'activeadmin-axlsx'
+
 # API doc
 gem 'grape-swagger'
 gem 'grape-swagger-rails'

@@ -16,19 +16,15 @@ ActiveAdmin.register Profile do
 
 actions :all, except: [:new, :create]
 
-csv do
-  column :id
-  column('用户ID') { |s| s.user.try(:uid) }
-  column :name
-  column('登录手机') { |s| s.user.try(:mobile).to_s }
-  column(:idcard) { |s| '身份证: ' + s.idcard.to_s }
-  column :phone
-  column :sex
-  column :birth
-  column(:is_student) { |s| s.is_student ? '在读' : '--' }
-  column :college
-  column :specialty
-  column('账号注册时间') { |s| s.user.try(:created_at) }
+# 导出Excel
+action_item :export_excel, only: :index, if: proc { authorized?(:export_excel, Profile) } do
+  link_to '导出Excel', action: 'export_excel'
+end
+
+collection_action :export_excel, method: :get do
+  authorize! :export_excel, Profile
+  @profiles = Profile.includes(:user).order('id desc')
+  render xlsx: "用户资料-#{Time.zone.now.strftime('%Y-%m-%d-%H-%M-%S')}", template: 'admin/export_excel/profiles.xlsx.axlsx', layout: false
 end
 
 index do

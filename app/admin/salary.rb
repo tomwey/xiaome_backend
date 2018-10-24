@@ -27,16 +27,27 @@ scope :unpayed, default: true
 scope :payed
 scope :all
 
-csv do
-  column :id
-  column :uniq_id
-  column :money
-  column(:project) { |s| "[编号:#{s.project.uniq_id}]#{s.project.title}" }
-  column(:user) { |s| "[#{s.user.mobile}]#{s.user.profile.try(:name)}" }
-  column :pay_name
-  column :pay_account
-  column :payed_at
-  column :created_at
+# csv do
+#   column :id
+#   column :uniq_id
+#   column :money
+#   column(:project) { |s| "[编号:#{s.project.uniq_id}]#{s.project.title}" }
+#   column(:user) { |s| "[#{s.user.mobile}]#{s.user.profile.try(:name)}" }
+#   column :pay_name
+#   column :pay_account
+#   column :payed_at
+#   column :created_at
+# end
+
+# 导出Excel
+action_item :export_excel, only: :index, if: proc { authorized?(:export_excel, Salary) } do
+  link_to '导出Excel', action: 'export_excel'
+end
+
+collection_action :export_excel, method: :get do
+  authorize! :export_excel, Salary
+  @salaries = Salary.includes(:user, :project).order('id desc')
+  render xlsx: "工资申请资料-#{Time.zone.now.strftime('%Y-%m-%d-%H-%M-%S')}", template: 'admin/export_excel/salaries.xlsx.axlsx', layout: false
 end
 
 index do

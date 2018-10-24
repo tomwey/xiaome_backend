@@ -22,7 +22,7 @@ class HomeController < ApplicationController
   def error_404
     render text: 'Not found', status: 404, layout: false
   end
-    
+  
   def download
     @page = Page.find_by(slug: 'app_download')
     @page_title = @page.title
