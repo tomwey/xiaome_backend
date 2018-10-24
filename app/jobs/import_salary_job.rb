@@ -3,12 +3,12 @@ class ImportSalaryJob < ActiveJob::Base
 
   def perform(arr)
     
-    puts arr
+    # puts arr
     arr.each do |row|
       user_ids = Profile.where(phone: row['phone'].to_i, name: row['name']).pluck(:user_id)
-      puts user_ids
+      # puts user_ids
       @salaries = Salary.where(user_id: user_ids, payed_at: nil, money: row['money'].to_f).all
-      puts @salaries
+      # puts @salaries
       if @salaries.any?
         @salaries.map { |salary| salary.update(state: 'approved') }
       end
