@@ -9,8 +9,8 @@ Redis::Objects.redis = $redis
 
 sidekiq_url = "redis://#{redis_config['host']}:#{redis_config['port']}/1"
 Sidekiq.configure_server do |config|
-  config.redis = { namespace: 'sidekiq', url: sidekiq_url }
+  config.redis = { namespace: 'sidekiq', url: sidekiq_url, password: SiteConfig.redis_pass }
 end
 Sidekiq.configure_client do |config|
-  config.redis = { namespace: 'sidekiq', url: sidekiq_url }
+  config.redis = { namespace: 'sidekiq', url: sidekiq_url, password: SiteConfig.redis_pass }
 end
