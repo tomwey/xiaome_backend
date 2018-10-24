@@ -1,3 +1,5 @@
+require 'roo'
+
 class Salary < ActiveRecord::Base
   validates :project_id, :money, :pay_name, :pay_account, presence: true
   validates :money, numericality: { greater_than_or_equal_to: 0 }
@@ -23,6 +25,29 @@ class Salary < ActiveRecord::Base
       transition :pending => :rejected
     end
   end 
+  
+  def self.open_spreadsheet(file)
+    ext = File.extname(file.original_filename)
+    return nil if ext.blank?
+    # puts ext
+    case ext
+    when ".csv" then Csv.new(file.path, nil, :ignore)
+    when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
+    when ".xlsx" then Roo::Excelx.new(file.path)
+    else raise "Unknown file type: #{file.original_filename}"
+    end
+  end
+  
+  def self.load_excel_data(file)
+    spreadsheet = open_spreadsheet(file)
+    # puts spreadsheet.row(2)
+    return '不正确的工资核对表文件' if spreadsheet.blank?
+    
+    ImportSalaryJob.perform_later(spreadsheet)
+    
+    return ''
+    # spreadsheet.info
+  end
   
   def state_name
     name = case self.state

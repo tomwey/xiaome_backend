@@ -39,6 +39,32 @@ scope :all
 #   column :created_at
 # end
 
+# 导入Excel
+action_item :import_excel, only: :index, if: proc { authorized?(:import_excel, Salary) } do
+  link_to '导入工资对照表', action: 'import_excel'
+end
+
+collection_action :import_excel, method: :get do
+  authorize! :import_excel, Salary
+  
+end
+
+collection_action :do_import_excel, method: :post do
+  authorize! :import_excel, Salary
+  
+  msg = Salary.load_excel_data(params[:salary_file])
+  if msg.blank?
+    msg = '工资核对完成'
+  end
+  
+  if msg.blank?
+    redirect_to collection_path, notice: '工资核对表上传成功，正在核对...'
+  else
+    redirect_to collection_path, alert: msg
+  end
+  
+end
+
 # 导出Excel
 action_item :export_excel, only: :index, if: proc { authorized?(:export_excel, Salary) } do
   link_to '导出Excel', action: 'export_excel'

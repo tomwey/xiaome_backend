@@ -123,6 +123,7 @@ gem 'simple_form'
 gem 'rubyzip', '= 1.0.0'
 gem 'axlsx', '= 2.0.1'
 gem 'axlsx_rails'
+gem "roo"
 # gem 'rubyzip', '< 1.0.0'
 # gem 'activeadmin-axlsx'
 
