@@ -43,7 +43,12 @@ class Salary < ActiveRecord::Base
     # puts spreadsheet.row(2)
     # return '不正确的工资核对表文件' if spreadsheet.blank?
     
-    ImportSalaryJob.perform_later(spreadsheet)
+    header = ['name', 'phone', 'money']
+    (1..spreadsheet.last_row).map do |i|
+      row = Hash[[header, spreadsheet.row(i)].transpose]
+      # puts "#{row['name']},#{row['phone']},#{row['money']}"
+      ImportSalaryJob.perform_later(row)
+    end
     
     return ''
     # spreadsheet.info
