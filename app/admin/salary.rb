@@ -56,16 +56,20 @@ collection_action :do_import_excel, method: :post do
     return 
   end
   
-  msg = Salary.load_excel_data(params[:salary_file])
+  ImportSalaryJob.perform_later(params[:salary_file])
+  
+  redirect_to collection_path, notice: '工资核对表上传成功，正在核对...'
+  
+  # msg = Salary.load_excel_data(params[:salary_file])
   # if msg.blank?
   #   msg = '工资核对完成'
   # end
   
-  if msg.blank?
-    redirect_to collection_path, notice: '工资核对表上传成功，正在核对...'
-  else
-    redirect_to collection_path, alert: msg
-  end
+  # if msg.blank?
+  #   redirect_to collection_path, notice: '工资核对表上传成功，正在核对...'
+  # else
+  #   redirect_to collection_path, alert: msg
+  # end
   
 end
 

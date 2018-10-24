@@ -28,8 +28,6 @@ class Salary < ActiveRecord::Base
   
   def self.open_spreadsheet(file)
     ext = File.extname(file.original_filename)
-    return nil if ext.blank?
-    # puts ext
     case ext
     when ".csv" then Csv.new(file.path, nil, :ignore)
     when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
@@ -40,18 +38,22 @@ class Salary < ActiveRecord::Base
   
   def self.load_excel_data(file)
     spreadsheet = open_spreadsheet(file)
-    # puts spreadsheet.row(2)
-    # return '不正确的工资核对表文件' if spreadsheet.blank?
-    
+    # # puts spreadsheet.row(2)
+    # # return '不正确的工资核对表文件' if spreadsheet.blank?
+    #
     header = ['name', 'phone', 'money']
     (1..spreadsheet.last_row).map do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       # puts "#{row['name']},#{row['phone']},#{row['money']}"
-      ImportSalaryJob.perform_later(row)
+      user_ids = Profile.where(phone: row['phone'].to_i, name: row['name']).pluck(:user_id)
+      puts user_ids
+      @salaries = Salary.where(user_id: user_ids, payed_at: nil, money: row['money'].to_f).all
+      puts @salaries
+      if @salaries.any?
+        @salaries.map { |salary| salary.update(state: 'approved') }
+      end
     end
     
-    return ''
-    # spreadsheet.info
   end
   
   def state_name
