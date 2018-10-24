@@ -41,7 +41,7 @@ class Salary < ActiveRecord::Base
   def self.load_excel_data(file)
     spreadsheet = open_spreadsheet(file)
     # puts spreadsheet.row(2)
-    return '不正确的工资核对表文件' if spreadsheet.blank?
+    # return '不正确的工资核对表文件' if spreadsheet.blank?
     
     ImportSalaryJob.perform_later(spreadsheet)
     
