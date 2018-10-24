@@ -19,7 +19,11 @@ class Ability
             can permission.action.to_sym, (permission.func_class == 'all' ? permission.func_class.to_sym : permission.func_class.constantize)
           end
         end
-        can :update, AdminUser, id: user.id
+        
+        can :update, AdminUser do |admin|
+          admin.id == user.id
+        end
+        # can :update, AdminUser, id: user.id
         
       end
     end

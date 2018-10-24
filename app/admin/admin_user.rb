@@ -18,10 +18,10 @@ ActiveAdmin.register AdminUser do
       current_admin_user.super_admin? ? AdminUser.all : AdminUser.where.not(email: Setting.admin_emails)
     end
     
-    def update_resource(object, attributes)
-      authorize! :set_permissions, object
-      super(object, attributes)
-    end
+    # def update_resource(object, attributes)
+    #   authorize! :set_permissions, object
+    #   super(object, attributes)
+    # end
     
   end
   
