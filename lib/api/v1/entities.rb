@@ -146,6 +146,16 @@ module API
         expose :title
         expose :begin_date, :end_date
         expose :money
+        expose :days do |model, opts|
+          # (model.begin_date..model.end_date)
+          if model.begin_date.blank? or model.end_date.blank? 
+            []
+          else
+            arr = []
+            (model.begin_date..model.end_date).each { |d| arr << d }
+            arr
+          end
+        end
       end
       
       class Salary < Base
