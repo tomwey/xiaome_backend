@@ -56,6 +56,19 @@ class Salary < ActiveRecord::Base
     
   end
   
+  def self.calc_score(settle_times)
+    return nil if settle_times.blank?
+    arr = settle_times.split(',')
+    score = 0
+    arr.each do |time|
+      temp = time.split('-')
+      temp.each do |d|
+        score += d.to_i
+      end
+    end
+    score
+  end
+  
   def state_name
     name = case self.state
     when 'pending' then '待审核'

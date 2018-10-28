@@ -36,6 +36,7 @@ module API
           requires :money,   type: Float, desc: '工资金额'
           optional :pay_name,type: String, desc: '支付宝姓名'
           optional :pay_account, type: String, desc: '支付宝账号'
+          optional :selected_days, type: String, desc: '结算日期'
         end
         post :create do
           user = authenticate!
@@ -60,11 +61,23 @@ module API
             return render_error(-1, '支付宝账号不能为空')
           end
           
+          if @project.begin_date.present?
+            if params[:selected_days].blank?
+              return render_error(-1, '结算日期不能为空')
+            end
+          end
+          
+          settle_times = params[:selected_days]
+          settle_times_score = Salary.calc_score(settle_times)
+          
           @salary = Salary.create!(project_id: @project.id, 
                                    user_id: user.id, 
                                    money: params[:money], 
                                    pay_name: pay_name, 
-                                   pay_account: pay_account)
+                                   pay_account: pay_account,
+                                   settle_times: settle_times,
+                                   settle_times_score: settle_times_score
+                                   )
           render_json(@salary, API::V1::Entities::Salary)
           
         end # end post
