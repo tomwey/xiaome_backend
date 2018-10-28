@@ -102,6 +102,8 @@
         id: '#'
         uniq_id: '编号'
         title: '兼职简介'
+        begin_date: '开始日期'
+        end_date: '截止日期'
         body: '兼职描述'
         money: '工资金额'
         opened: '是否打开'

@@ -144,8 +144,8 @@ module API
       class Project < Base
         expose :uniq_id, as: :id
         expose :title
+        expose :begin_date, :end_date
         expose :money
-        
       end
       
       class Salary < Base

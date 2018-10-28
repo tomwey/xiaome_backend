@@ -136,7 +136,7 @@ batch_action :approve do |ids|
   batch_action_collection.find(ids).each do |e|
     e.approve
   end
-  redirect_to collection_path, alert: "全部审核通过"
+  redirect_to collection_path(params), alert: "全部审核通过"
 end
 
 batch_action :reject do |ids|
@@ -144,19 +144,19 @@ batch_action :reject do |ids|
   batch_action_collection.find(ids).each do |e|
     e.reject
   end
-  redirect_to collection_path, alert: "审核未通过"
+  redirect_to collection_path(params), alert: "审核未通过"
 end
 
 member_action :approve, method: :put do
   authorize! :approve, resource
   resource.approve
-  redirect_to collection_path, notice: '审核通过'
+  redirect_to collection_path(params), notice: '审核通过'
 end
 
 member_action :reject, method: :put do
   authorize! :reject, resource
   resource.reject
-  redirect_to collection_path, notice: '审核不通过'
+  redirect_to collection_path(params), notice: '审核不通过'
 end
 
 form do |f|

@@ -1,5 +1,14 @@
 class Project < ActiveRecord::Base
+  validates :title, :begin_date, :end_date, presence: true
+  
   has_many :salaries, dependent: :destroy
+  
+  validate :check_date
+  def check_date
+    if begin_date > end_date
+      errors.add(:begin_date, '开始日期不能大于截止日期')
+    end
+  end
   
   before_create :generate_unique_id
   def generate_unique_id

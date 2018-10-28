@@ -4,7 +4,7 @@ ActiveAdmin.register Project do
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
-permit_params :title, :body, :money, :opened
+permit_params :title, :body, :money, :opened, :begin_date, :end_date
 #
 # or
 #
@@ -19,6 +19,9 @@ index do
   column('#', :id)
   column '编号', :uniq_id
   column :title, sortable: false
+  column '兼职工作时间' do |o|
+    o.begin_date ? "#{o.begin_date} 至 #{o.end_date}" : '--'
+  end
   column '兼职工资价格', :money
   column :opened, sortable: false
   column :created_at
@@ -46,6 +49,9 @@ end
 show do
   attributes_table do
     row :title
+    row '兼职工作时间' do |o|
+      "#{o.begin_date} 至 #{o.end_date}"
+    end
     row :money
     row :body do |o|
       simple_format o.body
@@ -103,6 +109,8 @@ form do |f|
   f.semantic_errors
   f.inputs do
     f.input :title
+    f.input :begin_date, as: :string, label: '开始日期', placeholder: '2018-01-21'
+    f.input :end_date, as: :string, label: '截止日期', placeholder: '2018-01-21'
     f.input :money, placeholder: '例如：150元'
     f.input :body, as: :text, input_html: { class: 'redactor' }, placeholder: '网页内容，支持图文混排', hint: '网页内容，支持图文混排'
     f.input :opened, label: '是否打开'
