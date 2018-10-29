@@ -61,11 +61,11 @@ module API
             return render_error(-1, '支付宝账号不能为空')
           end
           
-          if @project.begin_date.present?
-            if params[:selected_days].blank?
-              return render_error(-1, '结算日期不能为空')
-            end
-          end
+          # if @project.begin_date.present?
+          #   if params[:selected_days].blank?
+          #     return render_error(-1, '结算日期不能为空')
+          #   end
+          # end
           
           settle_times = params[:selected_days]
           settle_times_score = Salary.calc_score(settle_times)
