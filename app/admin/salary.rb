@@ -90,6 +90,9 @@ index do
   column '支付宝账号', :pay_account, sortable: false
   column '支付宝姓名', :pay_name, sortable: false
   column '工资金额(元)', :money
+  column '结算日期' do |o|
+    o.settle_times
+  end
   column('确认发放时间', :payed_at)
   column '申请发放时间' do |o|
     o.created_at.strftime('%Y年%m月%d日 %H:%M')
