@@ -17,11 +17,11 @@ module API
             @projects = @projects.where('uniq_id like :kw or title like :kw', kw: "%#{params[:keyword]}%")
           end
           
-          user = User.find_by(private_token: params[:token])
-          if user.present?
-            proj_ids = Salary.where(user_id: user.id).pluck(:project_id)
-            @projects = @projects.where.not(id: proj_ids)
-          end
+          # user = User.find_by(private_token: params[:token])
+          # if user.present?
+          #   proj_ids = Salary.where(user_id: user.id).pluck(:project_id)
+          #   @projects = @projects.where.not(id: proj_ids)
+          # end
           
           render_json(@projects, API::V1::Entities::Project)
           
