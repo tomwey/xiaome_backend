@@ -256,4 +256,16 @@ $(document).ready ->
 #       $('#checkin-rule').show()
 #     else
 #       EventForm.hideRuleInputs()
+
+$ ->
+  # Clear Filters button
+  $('.clear_filters_btn').off('click')
+  $('.clear_filters_btn').click (e) ->
+    params = window.location.search.slice(1).split('&')
+    regex = /^(q\[|q%5B|q%5b|page|commit)/
+    if typeof Turbolinks != 'undefined'
+      Turbolinks.visit(window.location.href.split('?')[0] + '?clear_filters=1&' + (param for param in params when not param.match(regex)).join('&'))
+      e.preventDefault()
+    else
+      window.location.search = 'clear_filters=1&' + (param for param in params when not param.match(regex)).join('&')
   

@@ -201,6 +201,9 @@ ActiveAdmin.setup do |config|
   # tag. You can reset the hash of meta tags included in logged out
   # pages:
   #   config.meta_tags_for_logged_out_pages = {}
+  
+  config.before_filter :restore_search_filters, unless: :devise_controller?
+  config.after_filter :save_search_filters, unless: :devise_controller?
 
   # == Removing Breadcrumbs
   #
@@ -320,4 +323,11 @@ ActiveAdmin.setup do |config|
   # You can inherit it with own class and inject it for all resources
   #
   # config.order_clause = MyOrderClause
+end
+
+require 'active_admin/filter_saver/controller'
+
+ActiveAdmin.before_load do |app|
+  # Add our Extensions
+  ActiveAdmin::BaseController.send :include, ActiveAdmin::FilterSaver::Controller
 end
