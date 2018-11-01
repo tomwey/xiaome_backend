@@ -74,7 +74,7 @@ show do
       column('#', :id)
       column '流水号', :uniq_id
       column '用户', sortable: false do |o|
-        link_to o.user.try(:profile).try(:name), [:admin, o.user.try(:profile)]
+        o.user.try(:profile) ? link_to(o.user.try(:profile).try(:name), [:admin, o.user.try(:profile)]) : '--'
       end
       column '支付宝账号', :pay_account, sortable: false
       column '支付宝姓名', :pay_name, sortable: false

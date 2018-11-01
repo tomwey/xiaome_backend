@@ -26,6 +26,8 @@ class Ability
         # can :update, AdminUser, id: user.id
         
       end
+      
+      cannot :destroy, :all
     end
     
     # if user.super_admin?
