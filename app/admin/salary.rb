@@ -16,7 +16,7 @@ permit_params :pay_account, :pay_name, :money
 # puts Project.where(opened: true).order('id desc').map { |p| ["[编号:#{p.uniq_id}]#{p.title}", p.id] }
 
 filter :project_id, as: :select, label: '兼职项目', collection: -> { Project.where(opened: true).order('id desc').limit(20).map { |p| ["[编号:#{p.uniq_id}]#{p.title}", p.id] } }
-filter :user_id, as: :select, label: '申请人', collection: User.order('id desc').map { |u| ["[#{u.mobile}]#{u.profile.try(:name)}", u.id] }
+filter :user_id, as: :select, label: '申请人', collection: -> { User.order('id desc').map { |u| ["[#{u.mobile}]#{u.profile.try(:name)}", u.id] } }
 filter :money, label: '申请工资'
 filter :created_at, label: '申请时间'
 filter :pay_account, label: '支付宝账号手机'
