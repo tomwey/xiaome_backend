@@ -3,6 +3,8 @@ class Project < ActiveRecord::Base
   
   has_many :salaries, dependent: :destroy
   
+  default_scope -> { where(visible: true).order('id desc') }
+  
   validate :check_date
   def check_date
     if begin_date > end_date
@@ -35,6 +37,11 @@ class Project < ActiveRecord::Base
   
   def senting_salary_money
     @money ||= salaries.where(payed_at: nil, state: 'approved').sum(:money)
+  end
+  
+  def delete!
+    self.visible = false;
+    self.save!
   end
   
 end

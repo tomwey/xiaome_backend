@@ -27,7 +27,7 @@ class Ability
         
       end
       
-      cannot :destroy, :all
+      # cannot :destroy, :all
     end
     
     # if user.super_admin?

@@ -14,7 +14,19 @@ ActiveAdmin.register Profile do
 #   permitted
 # end
 
-actions :all, except: [:new, :create]
+filter :user_uid, label: 'UID', as: :number
+filter :user_mobile, label: '登录手机', as: :string
+filter :name
+filter :sex
+filter :birth
+filter :phone
+filter :idcard
+filter :college
+filter :specialty
+filter :is_student
+filter :user_created_at, as: :date_range, label: '账号注册时间'
+
+actions :all, except: [:new, :create, :destroy]
 
 # 导出Excel
 action_item :export_excel, only: :index, if: proc { authorized?(:export_excel, Profile) } do
@@ -51,8 +63,26 @@ index do
     o.user.try(:created_at)
   end
   
-  actions
+  actions defaults: false do |o|
+    item "查看", [:admin, o] if authorized?(:read, o)
+    item "编辑", edit_admin_profile_path(o) if authorized?(:update, o)
+    item "删除", delete_admin_profile_path(o), method: :put, data: { confirm: '你确定吗？' } if authorized?(:destroy, o)
+  end
   
+end
+
+member_action :delete, method: :put do
+  authorize! :destroy, resource
+  resource.delete!
+  redirect_to collection_path, notice: '已删除'
+end
+
+batch_action :delete do |ids|
+  authorize! :destroy, Profile
+  batch_action_collection.find(ids).each do |e|
+    e.delete!
+  end
+  redirect_to collection_path, alert: "已删除"
 end
 
 show do

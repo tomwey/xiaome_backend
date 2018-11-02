@@ -22,7 +22,7 @@ filter :created_at, label: '申请时间'
 filter :pay_account, label: '支付宝账号手机'
 filter :pay_name, label: '支付宝账号姓名'
 
-actions :all, except: [:new, :create]
+actions :all, except: [:new, :create, :destroy]
 
 scope :unpayed, default: true
 scope :payed
@@ -86,7 +86,7 @@ index do
     o.user.try(:profile).blank? ? '--' : link_to(o.user.try(:profile).try(:name), [:admin, o.user.try(:profile)])
   end
   column '兼职', sortable: false do |o|
-    link_to o.project.try(:title), [:admin, o.project]
+    o.project.blank? ? '--' : link_to(o.project.try(:title), [:admin, o.project])
   end
   column '支付宝账号', :pay_account, sortable: false
   column '支付宝姓名', :pay_name, sortable: false
@@ -107,7 +107,7 @@ index do
     # if current_admin_user.admin? && o.payed_at.blank?
     
     item "编辑", edit_admin_salary_path(o) if authorized?(:edit, o)
-    item "删除", admin_salary_path(o), method: :delete, data: { confirm: '你确定吗？' } if authorized?(:destroy, o)
+    item "删除", delete_admin_salary_path(o), method: :put, data: { confirm: '你确定吗？' } if authorized?(:destroy, o)
     item "确认发放工资", confirm_pay_admin_salary_path(o), method: :put if o.approved? and authorized?(:confirm_pay, o)
     item "审核通过", approve_admin_salary_path(o), method: :put if o.can_approve? and authorized?(:approve, o)
     item "审核驳回", reject_admin_salary_path(o), method: :put if o.can_reject? and authorized?(:reject, o)
@@ -115,6 +115,20 @@ index do
     
   end
   
+end
+
+member_action :delete, method: :put do
+  authorize! :destroy, resource
+  resource.delete!
+  redirect_to collection_path, notice: '已删除'
+end
+
+batch_action :delete do |ids|
+  authorize! :destroy, Salary
+  batch_action_collection.find(ids).each do |e|
+    e.delete!
+  end
+  redirect_to collection_path, alert: "已删除"
 end
 
 batch_action :confirm_pay do |ids|

@@ -11,6 +11,7 @@ class Salary < ActiveRecord::Base
   
   scope :unpayed, -> { where(payed_at: nil) }
   scope :payed, -> { where.not(payed_at: nil) }
+  default_scope -> { where(visible: true).order('id desc') }
   
   state_machine initial: :pending do # 待审核
     state :approved # 已审核
@@ -78,6 +79,11 @@ class Salary < ActiveRecord::Base
     else ''
     end
     name
+  end
+  
+  def delete!
+    self.visible = false;
+    self.save!
   end
   
   def generate_oid

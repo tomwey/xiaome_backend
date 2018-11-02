@@ -14,6 +14,22 @@ permit_params :title, :body, :money, :opened, :begin_date, :end_date
 #   permitted
 # end
 
+filter :uniq_id
+filter :title
+filter :created_at
+filter :begin_date
+filter :end_date
+
+# filter :project_id, as: :select, label: '兼职项目', collection: Project.where(opened: true).order('id desc').limit(20).map { |p| ["[编号:#{p.uniq_id}]#{p.title}", p.id] }
+# filter :user_id, as: :select, label: '申请人', collection: User.order('id desc').map { |u| ["[#{u.mobile}]#{u.profile.try(:name)}", u.id] }
+# filter :money, label: '申请工资'
+# filter :created_at, label: '申请时间'
+# filter :pay_account, label: '支付宝账号手机'
+# filter :pay_name, label: '支付宝账号姓名'
+
+
+actions :all, except: [:destroy]
+
 index do
   selectable_column
   column('#', :id)
@@ -33,7 +49,7 @@ index do
   actions defaults: false do |o|
     item "查看", [:admin, o] if authorized?(:read, o)
     item "编辑", edit_admin_project_path(o) if authorized?(:update, o)
-    item "删除", admin_project_path(o), method: :delete, data: { confirm: '你确定吗？' } if authorized?(:destroy, o)
+    item "删除", delete_admin_project_path(o), method: :put, data: { confirm: '你确定吗？' } if authorized?(:destroy, o)
     item "确认发放工资", confirm_pay_admin_project_path(o), method: :put, data: { confirm: '你确定吗？' } if authorized?(:confirm_pay, o) and o.senting_salary_money > 0.0
 
   end
@@ -44,6 +60,20 @@ member_action :confirm_pay, method: :put do
   authorize! :confirm_pay, resource
   resource.confirm_pay!
   redirect_to collection_path, notice: '已发放'
+end
+
+member_action :delete, method: :put do
+  authorize! :destroy, resource
+  resource.delete!
+  redirect_to collection_path, notice: '已删除'
+end
+
+batch_action :delete do |ids|
+  authorize! :destroy, Project
+  batch_action_collection.find(ids).each do |e|
+    e.delete!
+  end
+  redirect_to collection_path, alert: "已删除"
 end
 
 show do
